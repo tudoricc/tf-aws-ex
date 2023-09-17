@@ -57,7 +57,7 @@ output "compute_subnets_ids" {
 }
 
 output "db_subnets_ids" {
-  value = module.vpc.database_subnets
+  value = module.vpc.database_subnet_group_name
 }
 
 output "public_subnets"{
