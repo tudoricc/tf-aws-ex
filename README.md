@@ -1,6 +1,15 @@
 # tf-aws-ex
 This repository contains terraform code for creating an infrastructure according to [diagram.png](https://github.com/tudoricc/tf-aws-ex/blob/main/diagram.png)
 
+## Requirements:
+
+<details>
+<summary>Requirements</summary>
+- Terraform: [download page](https://developer.hashicorp.com/terraform/downloads)
+- Access to an AWS Account
+- Admin User
+- Remote State (TBA)
+</details>
 
 ## Layout decision breakdown
 
@@ -95,3 +104,16 @@ Creates a ECS Cluster with 3 tasks in each AZ(depends on the alb and iam-ecs-asg
 
 ### asg-ecs-cluster
 Creates an ECS cluster with an autoscaling policy to make it highly availableZ(depends on the alb and iam-ecs-asg modules to be ran first)
+
+
+## How to run any module
+```
+#go in the directory of module you want to run
+cd <<MODULE-DIRECTORY>>
+terraform init
+# Check to see what would happen,
+terraform plan --var-file="./vars/<cluster>.tfvars"
+# Create resources
+terraform apply --var-file="./vars/<cluster>.tfvars"
+
+```
