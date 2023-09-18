@@ -5,10 +5,13 @@ This repository contains terraform code for creating an infrastructure according
 
 <details>
 <summary>Requirements</summary>
+    
 - Terraform: [download page](https://developer.hashicorp.com/terraform/downloads)
-- Access to an AWS Account
-- Admin User
+    
+- Access to an AWS Account and IAM User: [tutorial](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/aws-build)
+  
 - Remote State (TBA)
+
 </details>
 
 ## Layout decision breakdown
