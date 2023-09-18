@@ -10,10 +10,13 @@ locals {
   s3-bucket-name = "sonar-s3-${var.region_aws}-${var.environment}"
 }
 
+
+#calling the S3 bucket terraform module to create the bucket with a specific name
 module "s3_bucket" {
   source = "terraform-aws-modules/s3-bucket/aws"
 
   bucket = local.s3-bucket-name
+  #we make it private because security
   acl    = "private"
 
   control_object_ownership = true

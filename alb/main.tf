@@ -23,6 +23,8 @@ locals {
   public_subnets = data.terraform_remote_state.vpc.outputs.public_subnets
   default_sg_id = data.terraform_remote_state.vpc.outputs.default_sg_id
 }
+
+#create a SG for the LB,SG that will allow ecs to be exposed to the internet
 resource "aws_security_group" "lb" {
   name        = "example-alb-security-group"
   vpc_id      = local.vpc_id
@@ -41,6 +43,8 @@ resource "aws_security_group" "lb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+#Calling the public ALB module to create the ALB in the right VPC, in the public subnet 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 8.0"
@@ -57,7 +61,7 @@ module "alb" {
 resource "aws_lb_target_group" "ecs" {
   name     = "ecs"
   #modifying the targetrgoup here means that you will need to destroy the LB and hten recreate it
-  port     = 3000
+  port     = 3000 #port exposed by the containers 
   protocol = "HTTP"
   vpc_id   = local.vpc_id
   target_type = "ip"
@@ -73,7 +77,7 @@ resource "aws_lb_target_group" "ecs" {
   }
 
 }
-
+#creating a listener for the ALB
 resource "aws_lb_listener" "http" {
   load_balancer_arn = module.alb.lb_arn
   port              = "3000"

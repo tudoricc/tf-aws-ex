@@ -17,7 +17,12 @@ locals {
   alb_arn = data.terraform_remote_state.alb.outputs.alb_arn
 }
 
+#################################################################
+# THis module can do a lot more than just the iam roles for ecs
+#################################################################
 
+
+#creating a IAM role for the ecs service to allow it to assumeRole
 resource "aws_iam_role" "ecs_service" {
   name = "ecs-service"
 
@@ -37,6 +42,8 @@ resource "aws_iam_role" "ecs_service" {
 EOF
 }
 
+
+#These are the policies needed for the ASG to function
 data "aws_iam_policy_document" "ecs_service_elb" {
   statement {
     effect = "Allow"
@@ -67,6 +74,7 @@ data "aws_iam_policy_document" "ecs_service_elb" {
   }
 }
 
+#Adding more policies for the ASG to function properly,this is a data block(doesn't create any resources yet)
 data "aws_iam_policy_document" "ecs_service_standard" {
 
   statement {
@@ -92,6 +100,8 @@ data "aws_iam_policy_document" "ecs_service_standard" {
   }
 }
 
+#Docs: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-auto-scaling.html
+#The below policies are needed  for service autoscaling,this is a data block(doesn't create any resources yet)
 data "aws_iam_policy_document" "ecs_service_scaling" {
 
   statement {
@@ -125,6 +135,7 @@ data "aws_iam_policy_document" "ecs_service_scaling" {
   }
 }
 
+#Now creating the resources for the above policies
 resource "aws_iam_policy" "ecs_service_elb" {
   name = "ecs-access-elb-policy"
   path = "/"
@@ -165,7 +176,7 @@ resource "aws_iam_role_policy_attachment" "ecs_service_scaling" {
 }
 
 
-
+#Output
 output "ecs-iam-role" {
   value = aws_iam_role.ecs_service.arn
 }

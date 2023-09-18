@@ -35,7 +35,7 @@ locals {
   #Because we don't want this hardcoded we are retrieving hte VPC id from the remote state of the vpc module
   vpc_id = data.terraform_remote_state.vpc.outputs.vpc_id
 
-  #We are retrieving the private computer subnnets id from the remote state of the vpc moodule
+  #We are retrieving the private computer subnnets id from the remote state of the vpc moodule along with other important vars
   compute_subnets = data.terraform_remote_state.vpc.outputs.compute_subnets_ids
   alb_arn = data.terraform_remote_state.alb.outputs.alb_arn
   ecs_target_group = data.terraform_remote_state.alb.outputs.ecs_target_group
@@ -104,7 +104,7 @@ resource "aws_ecs_service" "hello_world" {
   name            = "sonar-${var.region_aws}-${var.environment}-service-ASG"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.hello_world.arn
-  #we create a task here right
+  #we create a task here right?
   desired_count   = 1 
   launch_type     = "FARGATE"
   lifecycle {
@@ -128,6 +128,7 @@ resource "aws_ecs_service" "hello_world" {
 # - move the ECS service/task/clsuter creation in a different module
 #
 
+#Now we have the magic for making the ecs cluster HA by creating an APP autoscaling  target, attaching to it policies(for automatic scaling) and setting a min count of 2
 resource "aws_appautoscaling_target" "count_to_target" {
   max_capacity = 5
   #we force it to go to 2 here-to test ASG works
@@ -170,7 +171,7 @@ resource "aws_appautoscaling_policy" "cpu" {
     target_value = 60
   }
 }
-
+#Outputs
 output "ECS-ASG-ARN" {
   value = aws_ecs_cluster.main.id
 }

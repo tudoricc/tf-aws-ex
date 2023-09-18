@@ -25,10 +25,12 @@ locals {
 }
 
 
-
+#Using the public aws ec2 TF module with the right parameters
+#Docs: https://registry.terraform.io/modules/terraform-aws-modules/ec2-instance/aws/latest
+#Looping through each of the subnets and then creating a resource in each AZ/compute subnet
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
-
+  
   for_each             =  { for subnet_id_compute in local.compute_subnets:  index(local.compute_subnets, subnet_id_compute) => subnet_id_compute }
 
   name = "sonar-${var.azs[each.key]}-${var.environment}"

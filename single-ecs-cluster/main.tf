@@ -87,12 +87,13 @@ resource "aws_security_group" "hello_world_task" {
 
 }
 
+#Here we are creating a simple ECS cluster spread across 3AZs
 #create a cluster with nothing in it now
 resource "aws_ecs_cluster" "main" {
   name = "sonar-${var.region_aws}-${var.environment}"
 }
 
-#create the service and associate it to the cluster you created before
+#create the service and associate it to the cluster you created before 
 resource "aws_ecs_service" "hello_world" {
   name            = "sonar-${var.region_aws}-${var.environment}-service"
   cluster         = aws_ecs_cluster.main.id

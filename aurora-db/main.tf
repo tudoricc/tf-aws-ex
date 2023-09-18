@@ -54,6 +54,7 @@ resource "random_password" "master" {
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 #because I am cheap and I don't want extra costs  using servlerless so if it's not used we don't pay
+#Docs: https://registry.terraform.io/modules/terraform-aws-modules/rds-aurora/aws/latest
 module "aurora_postgresql" {
   source = "terraform-aws-modules/rds-aurora/aws"
 

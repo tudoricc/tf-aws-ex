@@ -18,13 +18,14 @@ locals {
 }
 #VPC subnet calculator: https://www.davidc.net/sites/default/subnets/subnets.html
 #if you want you can create everything from scratch but why not use an already existing module
+#Docs: https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 module "vpc" {
   #name of the pre-made module
   source = "terraform-aws-modules/vpc/aws"
 
   name = local.vpc_name
   cidr = "10.0.0.0/16"
-
+  #we specify all the parameters we pass to the module,they rely on the vars we pass when creating the module for that cluster
   azs             = var.azs
   private_subnets = var.compute_subnets
   database_subnets = var.db_subnets
@@ -41,7 +42,7 @@ module "vpc" {
 }
 
 
-#Outputs,these will be also used for retrieving VPC ID for creating resources in the right VPC and right subnet
+#Outputs,these will be also used for example for retrieving VPC ID for creating resources in the right VPC and right subnet
 output "az-available" {
   value = var.azs
 }
